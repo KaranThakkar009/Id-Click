@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Router } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import FaceRecognition from './views/faceRecognition';
-import CameraFaceDetect from './views/cameraFaceDetect';
+//import CameraFaceDetect from './views/cameraFaceDetect';
 import Home from './views/Home';
 import Header from './components/Header';
 import './App.css';

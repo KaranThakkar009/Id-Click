@@ -15,14 +15,14 @@ export default class Home extends Component {
           padding: 5
         }}
       >
-        <h2>Student Facial Recognition WebApp</h2>
+        <h2>IdClick: Identify Student Digitally</h2>
         <h4>
           Single Page App for face detection and recognition of student
           , running in front-end browser using React and{' '}
           <a href="https://github.com/justadudewhohacks/face-api.js">
             face-api.js
           </a>{' '}
-          (without back-end)
+          with nodejs
         </h4>
         <img src={exampleImage} alt="example" width="350" />
 
@@ -51,11 +51,7 @@ export default class Home extends Component {
               <h4>Photo Input:</h4>
               <li>Input image can be image file or URL</li>
               <li>Image file must be jpg, jpeg, or png format</li>
-              <li>
-                Image URL host should allow cross-origin requests (CORS) or else
-                the App will not be able to access the image. (any facebook
-                images are good for testing with this App)
-              </li>
+              
               <li>
                 The App will try to detect all faces, which might take few
                 seconds depend on how many faces are in the image.

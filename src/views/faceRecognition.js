@@ -1,4 +1,4 @@
-import React, {Component } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import OnlyDesc from '../components/onlyDescriptors/onlyDescriptors';
 import { withRouter } from 'react-router-dom';
@@ -11,12 +11,11 @@ import {
 import DrawBox from '../components/drawBox';
 import ShowDescriptors from '../components/showDescriptors';
 import { JSON_PROFILE } from '../common/profile';
-import Data from '../descriptors/bnk48.json';
+
 
 const MaxWidth = 600;
 const boxColor = '#BE80B5';
 const testImg = require('../img/Mark1.jpg');
-
 
 let INIT_STATE = {
   url: null,
@@ -41,7 +40,7 @@ class FaceRecognition extends Component {
     };
   }
 
-  
+
 
   componentWillMount() {
     this.resetState();
@@ -62,6 +61,8 @@ class FaceRecognition extends Component {
   matcher = async () => {
     const faceMatcher = await createMatcher(JSON_PROFILE);
     this.setState({ faceMatcher });
+    // console.log(faceMatcher._labeledDescriptors[0]._label)
+    // console.log(faceMatcher)
   };
 
   handleFileChange = async event => {
@@ -91,36 +92,47 @@ class FaceRecognition extends Component {
     }
   };
 
-
-    
-  
-    addUserPost = (UserName,Desc) =>{
-      var element = []
-      for (let index = 0; index < Desc.props.fullDesc[0]._descriptor.length; index++) {
-        element.push(Desc.props.fullDesc[0]._descriptor[index]);
-      }
-      if(UserName && Desc){
-        var newUser = {
-          "name": UserName,
-          "descriptors": [element]
-        };
-        //console.log(newUser.descriptors)
-        }
-      let mergeData = [newUser];
-      //console.log(mergeData[0].descriptors)
-      this.saveUserJson(mergeData);
-      element = []
-      alert("Your data is saved")
-      //console.log(element)
-      
+  sendMessage = (message) => {
+   // console.log(this.refs.UserName.value, message)
+   const waMsg = {
+    "msg" : message,
+  }
+  const URL= 'http://localhost:5000/message'
+  axios.post(URL, waMsg)
+    .then(response => {
+      //console.log(response);
+    });
+    this.refs.message.value = "";
     }
 
-  saveUserJson = (User) =>{
+
+  addUserPost = (UserName, Desc) => {
+    var element = []
+    for (let index = 0; index < Desc.props.fullDesc[0]._descriptor.length; index++) {
+      element.push(Desc.props.fullDesc[0]._descriptor[index]);
+    }
+    if (UserName && Desc) {
+      var newUser = {
+        "name": UserName,
+        "descriptors": [element]
+      };
+      //console.log(newUser.descriptors)
+    }
+    let mergeData = [newUser];
+    //console.log(mergeData[0].descriptors)
+    this.saveUserJson(mergeData);
+    element = []
+    alert("Your data is saved")
+    //console.log(element)
+
+  }
+
+  saveUserJson = (User) => {
     const url = 'http://localhost:5000/write'
-    axios.post(url,User)
-    .then(response => {
+    axios.post(url, User)
+      .then(response => {
         //console.log(response);
-    });
+      });
   }
 
   handleImageChange = async (image = this.state.imageURL) => {
@@ -147,7 +159,7 @@ class FaceRecognition extends Component {
 
   handleDescriptorsCheck = event => {
     this.setState({ showDescriptors: event.target.checked });
-    
+
   };
 
   resetState = () => {
@@ -164,7 +176,7 @@ class FaceRecognition extends Component {
       isModelLoaded,
       error,
       loading
-     
+
     } = this.state;
 
     // Display working status
@@ -177,7 +189,7 @@ class FaceRecognition extends Component {
       status = <p style={{ color: 'blue' }}>Status: LOADING...</p>;
     } else if (!!fullDesc && !!imageURL && !loading) {
       if (fullDesc.length < 2)
-      status = <p>Status: {fullDesc.length} Face Detect</p>;
+        status = <p>Status: {fullDesc.length} Face Detect</p>;
       if (fullDesc.length > 1)
         status = <p>Status: {fullDesc.length} Faces Detect</p>;
     }
@@ -234,6 +246,7 @@ class FaceRecognition extends Component {
               ) : null}
             </div>
           ) : null}
+           
           {loading ? spinner : null}
         </div>
         <div
@@ -244,17 +257,21 @@ class FaceRecognition extends Component {
             marginTop: 10
           }}
         >
-          <p>Input Image file or URL</p>
+          <p>Input Image file</p>
           <input
             id="myFileUpload"
             type="file"
             onChange={this.handleFileChange}
             accept=".jpg, .jpeg, .png"
           />
-          
+
           <p>Enter name:</p>
-          <input type="text"  ref="UserName"/>
-          <button onClick={ () => this.addUserPost(this.refs.UserName.value,<OnlyDesc fullDesc={fullDesc}/>)}>Upload</button>
+          <input type="text" ref="UserName" placeholder="Enter Name" />
+          <button onClick={() => this.addUserPost(this.refs.UserName.value,
+            <OnlyDesc fullDesc={fullDesc} />)}>Upload</button>
+          <br /><br />
+          <input type="text" ref="message" placeholder="Enter Message" />
+          <button onClick={() => this.sendMessage(this.refs.message.value)}>Send Message</button>
           <br />
           {/* <div className="URLInput">
             <input
@@ -277,9 +294,9 @@ class FaceRecognition extends Component {
             />
             <label>Show Descriptors</label>
           </div>
-          {!!showDescriptors ? <ShowDescriptors fullDesc={fullDesc}/> : null}
+          {!!showDescriptors ? <ShowDescriptors fullDesc={fullDesc} /> : null}
           {/* {!!showDescriptors ? <OnlyDesc fullDesc={fullDesc} /> : null} */}
-          
+
         </div>
       </div>
     );
