@@ -5,8 +5,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const jsonData = require('../src/descriptors/bnk48.json')
 
-const accountSid = 'AC6f1f687b870cb599cbc186abf8621348';
-const authToken = 'ee4c08ba3304115745a1703942bf8cd9';
+const accountSid = '';
+const authToken = '';
 const client = require('twilio')(accountSid, authToken);
 
 
